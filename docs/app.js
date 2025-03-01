@@ -1,10 +1,11 @@
+(function(fn) {
+  setTimeout(fn, 1000);
+})(function() {
+"use strict";
+
 function log(...msg) {
-  msg = msg.map((v) => {
-    if (typeof v != "string")
-      return JSON.stringify(v);
-    return v;
-  });
-  document.getElementById("transaction-log")?
+  console.log(...msg);
+  document.getElementById("transaction-log")
     .innerText += msg.join(" ") + "\n";
 }
 
@@ -12,19 +13,23 @@ function log(...msg) {
 const Pi = window.Pi;
 
 // Empty array for testing purposes:
-const scopes = [ ];
+const scopes = [ "payments" ];
 
 //Empty function that will log an incomplete payment if found
 //Developer needs to implement this callback function
 function onIncompletePaymentFound(payment) {
-  log(payment);
+  log("onIncompletePaymentFound:",payment);
 };
 
-Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth){
-  log("auth:",auth);
-}).catch(function(error) {
-  log(error);
-});
+try {
+  Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth){
+    log("auth:",auth);
+  }).catch(function(error) {
+    log("auth err:",error);
+  });
+} catch (e) {
+  log(e);
+}
 
 const paymentData = {
     amount: 0,  /* Pi Amount being Transacted */
@@ -49,13 +54,28 @@ const paymentCallbacks = {
 
 function submitFn(ev) {
   ev.preventDefault();
-  paymentData.memo = this["memo"].value;
-  paymentData.amount = this["amount"].value;
-  Pi.createPayment(paymentData, paymentCallbacks).then(function(payment) {
-    log(payment);
-  }).catch(function(error) {
-    log(error);
-  });
+  const f = ev.target;
+  paymentData.memo = f["memo"].value;
+  paymentData.amount = f["amount"].value;
+  alert("processing test purchase");
+  try {
+    Pi.createPayment(paymentData, paymentCallbacks)
+    .then(function(payment) {
+      log("createPayment:",payment);
+    }).catch(function(error) {
+      log("createPayment error:",error);
+    });
+  }
+  catch (e) {
+    log("submitFn error:",e);
+  }
 }
 
 document.getElementById('myForm').addEventListener('submit', submitFn);
+
+alert("script loaded");
+
+window.pData = paymentData;
+window.pCall = paymentCallbacks;
+
+});

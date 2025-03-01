@@ -2,9 +2,17 @@
 <html lang="en">
   <head>
     <title>Sched list</title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <script> Pi.init({ version: "2.0", sandbox: true }) </script>
-    <script type="text/javascript" src="app.js"></script>
+    <script> Pi.init({ version: "2.0", sandbox: ! true }) </script>
+    <script>
+      window.onload = (function () {
+        var script = document.createElement('script');
+        script.src="https://cdn.jsdelivr.net/npm/eruda";
+        document.body.append(script);
+        script.onload = function () { eruda.init(); }
+      });
+    </script>
   </head>
   <body>
     <h1>Sched list app</h1>
@@ -17,5 +25,6 @@
     </form>
     <p>Transaction log:</p>
     <pre id="transaction-log"></pre>
+    <script type="text/javascript" src="app.js"></script>
   </body>
 </html>
