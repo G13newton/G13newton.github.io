@@ -47,7 +47,8 @@ const paymentCallbacks = {
   }
 };
 
-function submitFn() {
+function submitFn(ev) {
+  ev.preventDefault();
   paymentData.memo = this["memo"].value;
   paymentData.amount = this["amount"].value;
   Pi.createPayment(paymentData, paymentCallbacks).then(function(payment) {
@@ -56,3 +57,5 @@ function submitFn() {
     log(error);
   });
 }
+
+document.getElementById('myForm').addEventListener('submit', submitFn);
