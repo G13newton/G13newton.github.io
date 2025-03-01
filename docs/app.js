@@ -1,5 +1,13 @@
 (function(fn) {
-  setTimeout(fn, 1000);
+  setTimeout(function(){
+    try {
+      fn();
+    }
+    catch (e) {
+      document.getElementById("transaction-log")
+        .innerText += e + "\n" + e.stack;
+    }
+  }, 1000);
 })(function() {
 "use strict";
 
