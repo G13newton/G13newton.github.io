@@ -48,8 +48,8 @@ const paymentCallbacks = {
 };
 
 function submitFn() {
-  paymentData.memo = this["memo"];
-  paymentData.amount = this["amount"];
+  paymentData.memo = this["memo"].value;
+  paymentData.amount = this["amount"].value;
   Pi.createPayment(paymentData, paymentCallbacks).then(function(payment) {
     log(payment);
   }).catch(function(error) {
